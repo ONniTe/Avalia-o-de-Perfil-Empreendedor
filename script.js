@@ -5,40 +5,39 @@ let respostas = [];
 let respostaBonus = "";
 
 const perguntas = [
-    "Quando recebo uma tarefa com pouca orientação, consigo definir sozinho os próximos passos?",
+  "Quando recebo uma tarefa com pouca orientação, consigo definir sozinho os próximos passos?",
 
-    "Ao identificar uma falha em um processo, costumo sugerir melhorias mesmo quando isso não faz parte da minha função?",
+  "Ao identificar uma falha em um processo, costumo sugerir melhorias mesmo quando isso não faz parte da minha função?",
 
-    "Quando encontro obstáculos que dificultam meu trabalho, procuro alternativas antes de solicitar ajuda?",
+  "Quando encontro obstáculos que dificultam meu trabalho, procuro alternativas antes de solicitar ajuda?",
 
-    "Se uma ideia minha é rejeitada, procuro entender os motivos e aperfeiçoá-la para tentar novamente?",
+  "Se uma ideia minha é rejeitada, procuro entender os motivos e aperfeiçoá-la para tentar novamente?",
 
-    "Costumo me antecipar a possíveis problemas antes que eles afetem os resultados de uma atividade?",
+  "Costumo me antecipar a possíveis problemas antes que eles afetem os resultados de uma atividade?",
 
-    "Quando assumo um compromisso, mantenho meu foco até que ele seja concluído mesmo diante de dificuldades?",
+  "Quando assumo um compromisso, mantenho meu foco até que ele seja concluído mesmo diante de dificuldades?",
 
-    "Se percebo que minha equipe está enfrentando dificuldades, costumo oferecer ajuda espontaneamente?",
+  "Se percebo que minha equipe está enfrentando dificuldades, costumo oferecer ajuda espontaneamente?",
 
-    "Quando recebo críticas construtivas, utilizo esse feedback para melhorar meu desempenho?",
+  "Quando recebo críticas construtivas, utilizo esse feedback para melhorar meu desempenho?",
 
-    "Costumo buscar novos conhecimentos mesmo quando não existe uma exigência imediata para isso?",
+  "Costumo buscar novos conhecimentos mesmo quando não existe uma exigência imediata para isso?",
 
-    "Quando preciso tomar uma decisão importante, avalio diferentes alternativas antes de agir?",
+  "Quando preciso tomar uma decisão importante, avalio diferentes alternativas antes de agir?",
 
-    "Mesmo correndo o risco de errar, sinto-me confortável em assumir responsabilidades que outras pessoas evitam?",
+  "Mesmo correndo o risco de errar, sinto-me confortável em assumir responsabilidades que outras pessoas evitam?",
 
-    "Quando preciso escolher entre uma solução rápida e uma solução mais eficiente no longo prazo, analiso os impactos antes de decidir?",
+  "Quando preciso escolher entre uma solução rápida e uma solução mais eficiente no longo prazo, analiso os impactos antes de decidir?",
 
-    "Se uma atividade urgente surge enquanto estou executando outra tarefa importante, consigo reorganizar minhas prioridades sem perder produtividade?",
+  "Se uma atividade urgente surge enquanto estou executando outra tarefa importante, consigo reorganizar minhas prioridades sem perder produtividade?",
 
-    "Quando percebo um conflito de opiniões em uma equipe, procuro ajudar na busca de uma solução equilibrada?",
+  "Quando percebo um conflito de opiniões em uma equipe, procuro ajudar na busca de uma solução equilibrada?",
 
-    "Se tivesse a oportunidade de liderar uma iniciativa para melhorar um processo ou serviço, estaria disposto a assumir essa responsabilidade?"
+  "Se tivesse a oportunidade de liderar uma iniciativa para melhorar um processo ou serviço, estaria disposto a assumir essa responsabilidade?",
 ];
 
-function mostrarFormulario(){
-
-    document.querySelector(".container").innerHTML = `
+function mostrarFormulario() {
+  document.querySelector(".container").innerHTML = `
         <h1>Perfil Empreendedor</h1>
 
         <p>Digite seu nome para iniciar a avaliação.</p>
@@ -60,9 +59,8 @@ function mostrarFormulario(){
     `;
 }
 
-function mostrarSobre(){
-
-    document.querySelector(".container").innerHTML = `
+function mostrarSobre() {
+  document.querySelector(".container").innerHTML = `
         <h1>Sobre o Projeto</h1>
 
         <p>
@@ -84,27 +82,28 @@ function mostrarSobre(){
 }
 
 function iniciarTeste() {
+  nome = document.getElementById("nome").value.trim();
 
-    nome = document.getElementById("nome").value.trim();
-
-    if(!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(nome)){
+  if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(nome)) {
     alert("Digite apenas letras no nome!");
     return;
+  }
+
+  if (
+    nome.length < 3 ||
+    /(.)\1{2,}/.test(nome)
+  ) /*Validando nome xx ou caracter repitidos como xxx aaa e etc*/ {
+    alert("Digite um nome válido!");
+    return;
+  }
+
+  mostrarPergunta();
 }
 
-    if(nome.length < 3){
-        alert("Digite um nome válido!");
-        return;
-    }
+function mostrarPergunta() {
+  let progresso = ((perguntaAtual + 1) / perguntas.length) * 100;
 
-    mostrarPergunta();
-}
-
-function mostrarPergunta(){
-
-    let progresso = ((perguntaAtual + 1) / perguntas.length) * 100;
-
-    document.querySelector(".container").innerHTML = `
+  document.querySelector(".container").innerHTML = `
         <h1>Pergunta ${perguntaAtual + 1} de 15</h1>
 
         <div class="barra">
@@ -119,46 +118,46 @@ function mostrarPergunta(){
 
 <button class="talvez" onclick="responder(1)">Talvez</button>
 
-${perguntaAtual > 0 ? `
+${
+  perguntaAtual > 0
+    ? `
 <button class="voltar" onclick="voltarPergunta()">
     ⬅
 </button>
-` : ""}
+`
+    : ""
+}
     `;
 }
 
-function responder(valor){
+function responder(valor) {
+  respostas.push(valor);
 
-    respostas.push(valor);
+  pontuacao += valor;
 
-    pontuacao += valor;
+  perguntaAtual++;
 
-    perguntaAtual++;
-
-    if(perguntaAtual < perguntas.length){
+  if (perguntaAtual < perguntas.length) {
     mostrarPergunta();
-}
-    else{
-     mostrarPerguntaBonus();
-}
-}
-
-function voltarPergunta(){
-
-    if(perguntaAtual === 0){
-        return;
-    }
-
-    perguntaAtual--;
-
-    pontuacao -= respostas.pop();
-
-    mostrarPergunta();
+  } else {
+    mostrarPerguntaBonus();
+  }
 }
 
-function mostrarPerguntaBonus(){
+function voltarPergunta() {
+  if (perguntaAtual === 0) {
+    return;
+  }
 
-    document.querySelector(".container").innerHTML = `
+  perguntaAtual--;
+
+  pontuacao -= respostas.pop();
+
+  mostrarPergunta();
+}
+
+function mostrarPerguntaBonus() {
+  document.querySelector(".container").innerHTML = `
         <h1>Pergunta Bônus</h1>
 
         <p>
@@ -180,29 +179,25 @@ function mostrarPerguntaBonus(){
     `;
 }
 
-function salvarBonus(){
+function salvarBonus() {
+  respostaBonus = document.getElementById("respostaBonus").value.trim();
 
-    respostaBonus =
-        document.getElementById("respostaBonus").value.trim();
-
-    mostrarResultado();
+  mostrarResultado();
 }
 
-function mostrarResultado(){
+function mostrarResultado() {
+  let percentual = Math.round((pontuacao / 30) * 100);
 
-    let percentual = Math.round((pontuacao / 30) * 100);
+  let perfil = "";
+  let dicas = "";
+  let desafio = "";
+  let classePerfil = "";
 
-    let perfil = "";
-    let dicas = "";
-    let desafio = "";
-    let classePerfil = "";
+  if (pontuacao <= 8) {
+    perfil = "Iniciante";
+    classePerfil = "perfil-iniciante";
 
-    if(pontuacao <= 8){
-
-        perfil = "Iniciante";
-classePerfil = "perfil-iniciante";
-
-        dicas = `
+    dicas = `
             <ul>
                 <li>Desenvolva hábitos de organização.</li>
                 <li>Crie metas semanais.</li>
@@ -211,15 +206,12 @@ classePerfil = "perfil-iniciante";
             </ul>
         `;
 
-        desafio = "Tomar iniciativa em uma tarefa hoje.";
-    }
+    desafio = "Tomar iniciativa em uma tarefa hoje.";
+  } else if (pontuacao <= 15) {
+    perfil = "Em Desenvolvimento";
+    classePerfil = "perfil-desenvolvimento";
 
-    else if(pontuacao <= 15){
-
-        perfil = "Em Desenvolvimento";
-classePerfil = "perfil-desenvolvimento";
-
-        dicas = `
+    dicas = `
             <ul>
                 <li>Observe problemas que podem ser resolvidos.</li>
                 <li>Planeje melhor seu tempo.</li>
@@ -228,15 +220,12 @@ classePerfil = "perfil-desenvolvimento";
             </ul>
         `;
 
-        desafio = "Resolver um problema sem ajuda.";
-    }
+    desafio = "Resolver um problema sem ajuda.";
+  } else if (pontuacao <= 21) {
+    perfil = "Potencial Empreendedor";
+    classePerfil = "perfil-potencial";
 
-    else if(pontuacao <= 21){
-
-        perfil = "Potencial Empreendedor";
-classePerfil = "perfil-potencial";
-
-        dicas = `
+    dicas = `
             <ul>
                 <li>Continue aprendendo.</li>
                 <li>Compartilhe mais ideias.</li>
@@ -245,15 +234,12 @@ classePerfil = "perfil-potencial";
             </ul>
         `;
 
-        desafio = "Propor uma melhoria para sua equipe.";
-    }
+    desafio = "Propor uma melhoria para sua equipe.";
+  } else if (pontuacao <= 26) {
+    perfil = "Alto Potencial";
+    classePerfil = "perfil-alto";
 
-    else if(pontuacao <= 26){
-
-        perfil = "Alto Potencial";
-classePerfil = "perfil-alto";
-
-        dicas = `
+    dicas = `
             <ul>
                 <li>Lidere pequenas iniciativas.</li>
                 <li>Ajude colegas a evoluírem.</li>
@@ -262,15 +248,12 @@ classePerfil = "perfil-alto";
             </ul>
         `;
 
-        desafio = "Liderar uma atividade de melhoria.";
-    }
+    desafio = "Liderar uma atividade de melhoria.";
+  } else {
+    perfil = "Empreendedor Proativo";
+    classePerfil = "perfil-proativo";
 
-    else{
-
-        perfil = "Empreendedor Proativo";
-classePerfil = "perfil-proativo";
-
-        dicas = `
+    dicas = `
             <ul>
                 <li>Você demonstra forte proatividade.</li>
                 <li>Possui mentalidade empreendedora.</li>
@@ -279,27 +262,24 @@ classePerfil = "perfil-proativo";
             </ul>
         `;
 
-        desafio = "Criar e apresentar uma proposta de melhoria.";
-    }
+    desafio = "Criar e apresentar uma proposta de melhoria.";
+  }
 
- let resultado = {
+  let resultado = {
     nome: nome,
     pontuacao: pontuacao,
     percentual: percentual,
     perfil: perfil,
     respostaBonus: respostaBonus,
-    data: new Date().toLocaleString("pt-BR")
-};
+    data: new Date().toLocaleString("pt-BR"),
+  };
 
-let historico = JSON.parse(localStorage.getItem("historico")) || [];
+  let historico = JSON.parse(localStorage.getItem("historico")) || [];
 
-historico.push(resultado);
+  historico.push(resultado);
 
-localStorage.setItem(
-    "historico",
-    JSON.stringify(historico)
-);
-    document.querySelector(".container").innerHTML = `
+  localStorage.setItem("historico", JSON.stringify(historico));
+  document.querySelector(".container").innerHTML = `
         <h1>Relatório Final</h1>
 
         <h2>${nome}</h2>
@@ -331,14 +311,11 @@ localStorage.setItem(
     `;
 }
 
-function verHistorico(){
+function verHistorico() {
+  let historico = JSON.parse(localStorage.getItem("historico")) || [];
 
-    let historico =
-        JSON.parse(localStorage.getItem("historico")) || [];
-
-    if(historico.length === 0){
-
-        document.querySelector(".container").innerHTML = `
+  if (historico.length === 0) {
+    document.querySelector(".container").innerHTML = `
             <h1>Histórico</h1>
 
             <p>Nenhum resultado encontrado.</p>
@@ -348,32 +325,29 @@ function verHistorico(){
             </button>
         `;
 
-        return;
-    }
+    return;
+  }
 
-    let html = `
+  let html = `
         <h1>Histórico</h1>
     `;
 
-    historico.sort((a,b) => b.pontuacao - a.pontuacao);
+  historico.sort((a, b) => b.pontuacao - a.pontuacao);
 
-    let top5 = historico.slice(0,5);
+  let top5 = historico.slice(0, 5);
 
-    top5.forEach((item) => {
+  top5.forEach((item) => {
+    let medalha = "";
 
-        let medalha = "";
+    if (item.pontuacao >= 25) {
+      medalha = "Ouro";
+    } else if (item.pontuacao >= 20) {
+      medalha = "Prata";
+    } else if (item.pontuacao >= 15) {
+      medalha = "Bronze";
+    }
 
-        if(item.pontuacao >= 25){
-            medalha = "Ouro";
-        }
-        else if(item.pontuacao >= 20){
-            medalha = "Prata";
-        }
-        else if(item.pontuacao >= 15){
-            medalha = "Bronze";
-        }
-
-        html += `
+    html += `
             <div style="
                 background:#EFE6D8;
                 color:#4B3621;
@@ -401,9 +375,9 @@ function verHistorico(){
 
             </div>
         `;
-    });
+  });
 
-    html += `
+  html += `
         <button onclick="limparHistorico()">
             Limpar Histórico
         </button>
@@ -413,12 +387,11 @@ function verHistorico(){
         </button>
     `;
 
-    document.querySelector(".container").innerHTML = html;
+  document.querySelector(".container").innerHTML = html;
 }
 
-function verRespostaBonus(resposta){
-
-    document.querySelector(".container").innerHTML = `
+function verRespostaBonus(resposta) {
+  document.querySelector(".container").innerHTML = `
         <h1>Resposta Bônus</h1>
 
        <div class="resposta-bonus">
@@ -433,13 +406,12 @@ function verRespostaBonus(resposta){
     `;
 }
 
-function limparHistorico(){
+function limparHistorico() {
+  alert("Clique detectado");
 
-    alert("Clique detectado");
+  localStorage.removeItem("historico");
 
-    localStorage.removeItem("historico");
+  alert("Histórico limpo");
 
-    alert("Histórico limpo");
-
-    location.reload();
+  location.reload();
 }
