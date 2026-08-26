@@ -432,3 +432,16 @@ function verRespostaBonus(resposta){
         </button>
     `;
 }
+
+function limparHistorico(){
+
+    if(!confirm("Deseja realmente apagar todo o histórico?")){
+        return;
+    }
+
+    localStorage.removeItem("historico");
+
+    alert("Histórico limpo com sucesso!");
+
+    location.reload();
+}
