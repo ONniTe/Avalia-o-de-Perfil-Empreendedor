@@ -435,11 +435,7 @@ function verRespostaBonus(resposta){
 
 function limparHistorico(){
 
-    if(!confirm("Deseja realmente apagar todo o histórico?")){
-        return;
-    }
-
-    localStorage.removeItem("historico");
+    localStorage.clear();
 
     alert("Histórico limpo com sucesso!");
 
