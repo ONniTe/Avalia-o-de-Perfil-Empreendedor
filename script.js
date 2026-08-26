@@ -435,9 +435,11 @@ function verRespostaBonus(resposta){
 
 function limparHistorico(){
 
-    localStorage.clear();
+    alert("Clique detectado");
 
-    alert("Histórico limpo com sucesso!");
+    localStorage.removeItem("historico");
+
+    alert("Histórico limpo");
 
     location.reload();
 }
